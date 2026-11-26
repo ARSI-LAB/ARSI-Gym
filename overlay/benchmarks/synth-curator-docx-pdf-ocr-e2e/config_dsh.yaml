@@ -1,0 +1,30 @@
+config_paths:
+- resources_servers/synth_env/configs/synth_env.yaml
+synth_env:
+  resources_servers:
+    synth_env:
+      allowed_agents:
+      - synth_env_agent
+      - dsh_agent
+synth_curator_docx_pdf_ocr_e2e_dsh_agent:
+  responses_api_agents:
+    dsh_agent:
+      entrypoint: app.py
+      resources_server:
+        type: resources_servers
+        name: synth_env
+      concurrency: 4
+      timeout: 900
+      datasets:
+      - name: synth-curator-docx-pdf-ocr-e2e
+        type: benchmark
+        jsonl_fpath: benchmarks/synth-curator-docx-pdf-ocr-e2e/data/synth-curator-docx-pdf-ocr-e2e.jsonl
+        prompt_config: benchmarks/prompts/synth-curator-docx-pdf-ocr-e2e/agent_dsh.yaml
+        prepare_script: benchmarks/synth-curator-docx-pdf-ocr-e2e/prepare.py
+synth_curator_docx_pdf_ocr_e2e_environment_server:
+  environment_servers:
+    legacy_agent:
+      entrypoint: app.py
+      agent_server:
+        type: responses_api_agents
+        name: synth_curator_docx_pdf_ocr_e2e_dsh_agent
